@@ -24,103 +24,6 @@
     var checkString = params.get("check");
     //检测是否有检测脚本
     var checkObject = JSON.parse(checkString)
-
-    function checkName(name, reString) {
-      if(reString) {
-        regex = new RegExp(reString)
-        return regex.test(name)
-      }
-      return true;
-    }
-    function checkFile(files, arrayRules) {
-      for(let rule of arrayRules) {
-        //检测数量
-        let successNum = 0;
-        for(let file of files) {
-          if(checkName(file.name, rule.rule)) {
-            if(rule.directory) {
-              let backFolder = currentFolder;
-              currentFolder.folder(file.name)
-            }
-            successNum += 1;
-          }
-        }
-        if(!checkSize(rule.maxSize, minSize, successNum)) {
-          return false;
-        }
-      }
-      return true
-    }
-
-    function checkSize(maxsize, minsize, length) {
-      if(minsize) {
-        if(length >= minsize) {
-          if(maxsize) {
-            if(length <= maxsize){
-              return true
-            } else {
-              return false
-            }
-          } else {
-            return true;
-          }
-        } else {
-          return false;
-        }
-      } else {
-        if(maxsize) {
-          if(length <= maxsize) {
-            return true
-          } else {
-            return false
-          }
-        } else {
-          return true
-        }
-      }
-    }
-    function checkFolder(Folders, rule) {
-      if(rule) {
-        //检测文件数量
-        if(!checkSize(rule.maxsize, rule.minsize, folders.length)) {
-          return false;
-        }
-        //检测all，如果有all所有more和num不生效
-        if(rule.all) {
-          for(let file of files) {
-            if(!checkName(file.name, rule.all)) {
-              return false
-            }
-          }
-        } else {
-          //
-        }
-      }
-      return true
-    }
-    function checkJzip(jzip, directory) {
-      if(!directory) {
-        return true;
-      }
-      folders = jzip.folder(/(^[^\/]*?\/)(?!.*?\/)$/)  //因为要找到最高级的目录所以使用懒惰匹配
-      files = jzip.file(/^[^\/]*$/)
-      //检测文件数量
-      if(!checkSize(rule.maxsize, rule.minsize, files.length+folders.length)) {
-        return false;
-      }
-      currentFolder = jzip;
-      //检测files
-      if(!checkFile(files, directory.fileRules)) {
-        return false
-      }
-      //检测folder
-
-      for(let folder of folders) {
-
-      }
-      console.log(folders)
-      return true
-    }
     //主体部分
     fileOfInput = document.getElementById("file-input")
     fileOfInput.addEventListener("change", function(event) {
@@ -143,16 +46,18 @@
           由于JSzip未提供层级化的遍历结构
           所以会比较麻烦
         */
-        if(checkObject.directory) {
-          if(!checkJzip(zip, checkObject.directory)) {
-            result.textContent = "格式错误"
-          } else {
-            result.textContent = "格式正确"
-          }
-        }else {
-          result.textContent = "格式正确"
-        }
+        nameArray = []
+        ozip.forEach(function(name){nameArray.push(name)})
       })
     })
+    function checkName(name, reString) {
+      if(reString) {
+        regex = new RegExp(reString)
+        return regex.test(name)
+      } else {
+        return true
+      }
+      return true;
+    }
   </script>
 </html>
