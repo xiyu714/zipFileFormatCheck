@@ -31,12 +31,14 @@
         //现在不打算扩展，只要一个正则表达式就可以了
         //reString = String.raw`^\d{12}([\u4e00-\u9fa5]|\u3007)+([\.\uff0e\u00b7\u30fb]?|\u3007?)+([\u4e00-\u9fa5|]|\u3007)+$`
         reString = String.raw`{
-          "zipName":"^\\d{12}([\\u4e00-\\u9fa5]|\\u3007)+([\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+([\\u4e00-\\u9fa5|]|\\u3007)+$"
+          "zipName":"^\\d{12}([\\u4e00-\\u9fa5]|\\u3007)+([\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+([\\u4e00-\\u9fa5|]|\\u3007)+$",
           "rules":[
-            "(^[^\/]*?\/)(?!.*?\/)$${1}"
+            "(^[^/]*?/)(?!.*?/)$\${1}"
           ]
         }
 `    //之所以在这里还需要一次转义，是因为需要使用json解析
+        //由于String.raw的问题
+        reString = reString.replace("\\$", "$")
         urlSearchParams.append("check", reString)
         return urlSearchParams.toString()
       }
