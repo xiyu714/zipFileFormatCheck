@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>验证生成</title>
+  </head>
+  <body>
+    <h2>验证脚本</h2>
+    <textarea id="checkScriptInput" rows="8" cols="80"></textarea>
+    <input type="button" value="生成验证网页地址" id="generateUrl">
+    <div class="checkScriptOutput">
+      <p id="checkScriptUrl"></p>
+    </div>
+    <div id="howToUse">
+      <h3>如何使用</h3>
+      <p>使用json文本形式</p>
+    </div>
+    <script type="text/javascript">
+      function getCheckUrl(queryString) {
+        var url = window.location.toString()
+        var array = url.split("/")
+        array[array.length-1] = "check.html" + "?" + generateQueryString()
+        return array.join("/")
+      }
+
+      function generateQueryString() {
+        var inputTextarea = document.getElementById("checkScriptInput")
+        var inputText = inputTextarea.value
+        urlSearchParams = new URLSearchParams()
+        //解析inputText，保存queryString中
+        //现在不打算扩展，只要一个正则表达式就可以了
+        //reString = String.raw`^\d{12}([\u4e00-\u9fa5]|\u3007)+([\.\uff0e\u00b7\u30fb]?|\u3007?)+([\u4e00-\u9fa5|]|\u3007)+$`
+        reString = String.raw`{
+          "zipname":"^\\d{12}([\\u4e00-\\u9fa5]|\\u3007)+([\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+([\\u4e00-\\u9fa5|]|\\u3007)+$",
+          "subrule":{
+              "size": 2,
+              "file" : [],
+              "directory":[
+                {
+                  "maxsize": 1,
+                  "minsize": 1,
+                  "rulestring": "^\\d{12}([\\u4e00-\\u9fa5]|\\u3007)+([\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+([\\u4e00-\\u9fa5|]|\\u3007)+$"
+                }
+              ]
+          }
+        }`    //之所以在这里还需要一次转义，是因为需要使用json解析
+        urlSearchParams.append("check", reString)
+        return urlSearchParams.toString()
+      }
+      var input = document.getElementById("generateUrl")
+      var pOfOutput = document.getElementById("checkScriptUrl")
+      input.addEventListener("click", function() {
+        pOfOutput.textContent = getCheckUrl()
+      })
+    </script>
+  </body>
+</html>

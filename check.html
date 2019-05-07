@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+  包含两部分：
+    1.从url中获取验证文本
+    2.用户上传文件（zip压缩）
+      jszip.js解压
+ -->
+<html lang="zh" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jszip.js"></script>
+    <title>fileCheck</title>
+  </head>
+  <body>
+    <input type="file" accept="application/zip" id="file-input">
+    <div>
+      <p id="result"></p>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var result = document.getElementById("result")
+    //获取check对象
+    var params = new URLSearchParams(window.location.toString().split("?")[1])
+    var checkString = params.get("check");
+    //检测是否有检测脚本
+    var checkObject = JSON.parse(checkString)
+
+    //检测都是，有规则才会判断失败
+    function reCheckName(name) {
+      if(checkObject.zipname) {
+        regex = new RegExp(checkObject.zipname)
+        return regex.test(name)
+      } else {
+        return true
+      }
+    }
+    function checkName(name, reString) {
+      regex = new RegExp(reString)
+      return regex.test(name)
+    }
+    function checkFile(files, rule) {
+      if(rule) {
+        //检测文件数量
+        if(rule.size) {
+          if(rule.size != files.length) {
+            return false
+          }
+        }
+        //检测all，如果有all所有more和num不生效
+        if(rule.all) {
+          for(let file of files) {
+            if(!checkName(file.name, rule.all)) {
+              return false
+            }
+          }
+        } else {
+          //检测more和num
+        }
+      }
+      return true
+    }
+    function checkJzip(jzip, rule) {
+      folders = jzip.folder(/(^[^\/]*?\/)(?!.*?\/)$/)  //因为要找到最高级的目录所以使用懒惰匹配
+      files = jzip.file(/^[^\/]*$/)
+      //检测文件数量
+      if(rule.size) {
+        if(rule.size != folders.length+files.length) {
+          return false
+        }
+      }
+      console.log(rule)
+      //检测file
+      if(!checkFile(files, rule.file)) {
+        return false
+      }
+      for(let folder of folders) {
+
+      }
+      console.log(folders)
+      return true
+    }
+    fileOfInput = document.getElementById("file-input")
+    fileOfInput.addEventListener("change", function(event) {
+      zipfile = fileOfInput.files[0]  //方便调试
+      //测试压缩文件名
+      var name = zipfile.name.split(".")[0]
+      if(!reCheckName(name)) {
+        result.textContent = "压缩文件名不符合要求"
+        return
+      }
+      //接下来验证压缩文件中类容是否正确
+      var jszip = new JSZip();
+      /*
+        jszip可以使用file()和folde()创建和获取文件以及文件夹
+      */
+      //验证一级目录
+      jszip.loadAsync(zipfile).then(function(zip) {
+        console.log(zip)
+        /*
+          由于JSzip未提供层级化的遍历结构
+          所以会比较麻烦
+        */
+        if(checkObject.subrule) {
+          if(!checkJzip(zip, checkObject.subrule)) {
+            result.textContent = "格式错误"
+          } else {
+            result.textContent = "格式正确"
+          }
+        }else {
+          result.textContent = "格式正确"
+        }
+      })
+    })
+  </script>
+</html>
