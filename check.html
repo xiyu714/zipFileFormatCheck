@@ -71,14 +71,13 @@
         let one = rresult[1];
         let comma = rresult[2];
         let two = rresult[3];
-        let reString = refileRule.replace(rresult[0]);
+        let reString = refileRule.replace(rresult[0], "");
         let regex = RegExp(reString);
         if(comma == "") { //假设one不为""   //固定次数模式
           let num = 0;
           files.forEach(function(filename, index) {
             if(regex.test(filename)) {
               num += 1;
-              console.log(files, reString, filename)
               files.splice(index, 1); //从中删除一个元素
             }
           })
@@ -126,11 +125,12 @@
           return false;
         }
       }
-      if(filesBuffer.length == 0) {
-        return true
-      } else {
-        return false
-      }
+      // if(filesBuffer.length == 0) {
+      //   return true
+      // } else {
+      //   return false
+      // }
+      return true;
     }
     function checkName(name, reString) {
       if(reString) {
