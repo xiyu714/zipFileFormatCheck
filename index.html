@@ -32,6 +32,9 @@
         //reString = String.raw`^\d{12}([\u4e00-\u9fa5]|\u3007)+([\.\uff0e\u00b7\u30fb]?|\u3007?)+([\u4e00-\u9fa5|]|\u3007)+$`
         reString = String.raw`{
           "zipName":"^\\d{12}([\\u4e00-\\u9fa5]|\\u3007)+([\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+([\\u4e00-\\u9fa5|]|\\u3007)+$"
+          "rules":[
+            "(^[^\/]*?\/)(?!.*?\/)$${1}"
+          ]
         }
 `    //之所以在这里还需要一次转义，是因为需要使用json解析
         urlSearchParams.append("check", reString)
