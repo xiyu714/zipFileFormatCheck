@@ -24,6 +24,7 @@
     var checkString = params.get("check");
     //检测是否有检测脚本
     var checkObject = JSON.parse(checkString)
+    var ruleVariable = {};  //用来保存匹配到的信息
     //主体部分
     fileOfInput = document.getElementById("file-input")
     fileOfInput.addEventListener("change", function(event) {
@@ -34,6 +35,7 @@
         result.textContent = "压缩文件名不符合要求"
         return
       }
+      ruleVariable["zipName"] = name;
       //接下来验证压缩文件中类容是否正确
       var jszip = new JSZip();
       /*
@@ -58,8 +60,16 @@
     })
 
     function matchOne(refileRule, files) { //refileRule为refile规则，files是一个filename数组
+      //refilerule次数
       var r = /\${(\d*)(,*)\s*(\d*)}$/;
       var rresult = r.exec(refileRule)
+      let reString = refileRule.replace(rresult[0], "");
+      //变量引用
+      r = /\${=([a-zA-Z]*)}/;
+      var externRulst= r.exec(reString);
+      var externValueName = externRulst[1];
+      reString = reString.replace(externRulst[0], ruleVariable[externValueName])
+
       if(rresult == null) { //无限制次数匹配
         let regex = RegExp(reString);
         files.forEach(function(filename, index) {
@@ -71,7 +81,6 @@
         let one = rresult[1];
         let comma = rresult[2];
         let two = rresult[3];
-        let reString = refileRule.replace(rresult[0], "");
         let regex = RegExp(reString);
         if(comma == "") { //假设one不为""   //固定次数模式
           let num = 0;
