@@ -25,7 +25,7 @@
 
       function generateQueryString() {
         var inputTextarea = document.getElementById("checkScriptInput")
-        var inputText = inputTextarea.value
+        inputText = inputTextarea.value //直接使用这个也没有问题
         urlSearchParams = new URLSearchParams()
         //解析inputText，保存queryString中
         //现在不打算扩展，只要一个正则表达式就可以了
