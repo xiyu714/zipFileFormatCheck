@@ -63,12 +63,14 @@
       //refilerule次数
       var r = /\${(\d*)(,*)\s*(\d*)}$/;
       var rresult = r.exec(refileRule)
-      let reString = refileRule.replace(rresult[0], "");
+      reString = refileRule.replace(rresult[0], "");
       //变量引用
       r = /\${=([a-zA-Z]*)}/;
       var externRulst= r.exec(reString);
-      var externValueName = externRulst[1];
-      reString = reString.replace(externRulst[0], ruleVariable[externValueName])
+      if(externRulst != null) {
+        var externValueName = externRulst[1];
+        reString = reString.replace(externRulst[0], ruleVariable[externValueName])
+      }
 
       if(rresult == null) { //无限制次数匹配
         let regex = RegExp(reString);
