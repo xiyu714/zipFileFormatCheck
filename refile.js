@@ -35,6 +35,8 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     files.forEach(function(filename, index) {
       if(regex.test(filename)) {
         files.splice(index, 1); //从中删除一个元素
+        lastFileName = filename;
+        ruleVariableSet();
       }
     })
   } else {  //限定的匹配次数
