@@ -105,7 +105,7 @@ function match(refileRules, files) { //refileRules是一个refile规则数组，
 }
 function checkName(name, reString) {
   if(reString) {
-    regex = new RegExp(reString)
+    var regex = new RegExp(reString)
     return regex.test(name)
   } else {
     return true
