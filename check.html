@@ -68,6 +68,7 @@
               所以会比较麻烦
             */
             //测试规则
+            nameArray.push(`${file.name}/`) //添加一个目录
             ozip.forEach(function(name){nameArray.push(`${file.name}/${name}`)})
             matchAndPrint();
           })
