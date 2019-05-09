@@ -3,8 +3,11 @@ var ruleVariable = {};  //用来保存匹配到的信息
 function matchOne(refileRule, files) { //refileRule为refile规则，files是一个filename数组
   //refilerule次数
   var r = /\${(\d*)(,*)\s*(\d*)}$/;
-  var rresult = r.exec(refileRule)
-  reString = refileRule.replace(rresult[0], "");
+  var rresult = r.exec(refileRule);
+  reString = refileRule;
+  if(rresult != null) {
+    reString = refileRule.replace(rresult[0], "");
+  }
   //变量引用
   r = /\${=([a-zA-Z]*)}/;
   var externRulst= r.exec(reString);
