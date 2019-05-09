@@ -1,3 +1,5 @@
+var ruleVariable = {};  //用来保存匹配到的信息
+
 function matchOne(refileRule, files) { //refileRule为refile规则，files是一个filename数组
   //refilerule次数
   var r = /\${(\d*)(,*)\s*(\d*)}$/;

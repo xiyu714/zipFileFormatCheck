@@ -25,39 +25,59 @@
     var checkString = params.get("check");
     //检测是否有检测脚本
     var checkObject = JSON.parse(checkString)
-    var ruleVariable = {};  //用来保存匹配到的信息
+
     //主体部分
     fileOfInput = document.getElementById("file-input")
     fileOfInput.addEventListener("change", function(event) {
-      zipfile = fileOfInput.files[0]  //方便调试
-      //测试压缩文件名
-      var name = zipfile.name.split(".")[0]
-      if(!checkName(name, checkObject.zipName)) {
-        result.textContent = "压缩文件名不符合要求"
-        return
-      }
-      ruleVariable["zipName"] = name;
-      //接下来验证压缩文件中类容是否正确
-      var jszip = new JSZip();
-      /*
-        jszip可以使用file()和folde()创建和获取文件以及文件夹
-      */
-      //验证一级目录
-      jszip.loadAsync(zipfile).then(function(zip) {
-        ozip = zip
-        /*
-          由于JSzip未提供层级化的遍历结构
-          所以会比较麻烦
-        */
-        nameArray = []
-        ozip.forEach(function(name){nameArray.push(name)})
-        //测试规则
+      file = fileOfInput.files[0]  //方便调试
+      // //测试压缩文件名
+      // var name = zipfile.name.split(".")[0]
+      // if(!checkName(name, checkObject.zipName)) {
+      //   result.textContent = "压缩文件名不符合要求"
+      //   return
+      // }
+      // ruleVariable["zipName"] = name;
+
+      //检测文件为压缩文件还是普通文件
+      fileSplitArray = file.name.split(".");
+      nameArray = []
+      function matchAndPrint() {
         if(match(checkObject.rules, nameArray) == true) {
           result.textContent = "格式正确";
         } else {
           result.textContent = "格式错误";
         }
-      })
+      }
+      if(fileSplitArray.length == 1) {  //这是一个没有后缀的一般文件
+        //测试规则
+        nameArray.push(file.name);
+        matchAndPrint();
+      } else {  //有后缀的文件，需要知道后缀是什么
+        let filesuffix = fileSplitArray.pop();
+        if(filesuffix == "zip") { //这是一个zip压缩文件
+          //接下来验证压缩文件中类容是否正确
+          var jszip = new JSZip();
+          /*
+            jszip可以使用file()和folde()创建和获取文件以及文件夹
+          */
+          //验证一级目录
+          jszip.loadAsync(file).then(function(zip) {
+            ozip = zip
+            /*
+              由于JSzip未提供层级化的遍历结构
+              所以会比较麻烦
+            */
+            //测试规则
+            ozip.forEach(function(name){nameArray.push(`${file.name}/${name}`)})
+            matchAndPrint();
+          })
+        } else {  //还是作为一个一般文件处理
+          //测试规则
+          nameArray.push(file.name);
+          matchAndPrint();
+        }
+      }
+
     })
   </script>
 </html>
