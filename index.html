@@ -42,7 +42,11 @@
 `    //之所以在这里还需要一次转义，是因为需要使用json解析
         //由于String.raw的问题
         reString = reString.replace(/\\\$/g, "$")
-        urlSearchParams.append("check", JSON.stringify(reString))
+        reString = reString.replace(/\\/g, String.raw`\\`) //这里是因为JSON对转义字符比较敏感，错误的转义字符会之间报错，而不是忽略
+        //测试语句是否正确
+        JSON.parse(reString);
+
+        urlSearchParams.append("check", reString)
         return urlSearchParams.toString()
       }
       var input = document.getElementById("generateUrl")
