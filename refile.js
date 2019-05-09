@@ -12,7 +12,21 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     var externValueName = externRulst[1];
     reString = reString.replace(externRulst[0], ruleVariable[externValueName])
   }
-
+  //变量声明
+  r = /\${\?([a-zA-Z]*)}/;
+  var declareName = "";
+  var declareRuslt = r.exec(reString);
+  if(declareRuslt != null) {
+    declareName = declareRuslt[1];
+    reString = reString.replace(declareRuslt[0], "");   //删除这部分
+  }
+  //使用正则进行匹配
+  var lastFileName = "";
+  function ruleVariableSet() {
+    if(declareName != "") { //表示有变量声明
+      ruleVariable[declareName] = lastFileName;
+    }
+  }
   if(rresult == null) { //无限制次数匹配
     let regex = RegExp(reString);
     files.forEach(function(filename, index) {
@@ -20,7 +34,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         files.splice(index, 1); //从中删除一个元素
       }
     })
-  } else {
+  } else {  //限定的匹配次数
     let one = rresult[1];
     let comma = rresult[2];
     let two = rresult[3];
@@ -30,10 +44,13 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
       files.forEach(function(filename, index) {
         if(regex.test(filename)) {
           num += 1;
+          lastFileName = filename;
           files.splice(index, 1); //从中删除一个元素
         }
       })
       if(num == parseInt(one)) {
+        //匹配成功，将最后一次匹配的结果，放入ruleVariable中
+        ruleVariableSet();
         return true;
       } else {
         return false;
@@ -47,6 +64,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         }
       })
       if(num >= parseInt(one)) {
+        ruleVariableSet();
         return true;
       } else {
         return false;
@@ -60,6 +78,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         }
       })
       if(num >= parseInt(one) && num <= parseInt(two)) {
+        ruleVariableSet();
         return true;
       } else {
         return false;
