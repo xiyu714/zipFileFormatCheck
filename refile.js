@@ -18,27 +18,31 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     reString = reString.replace(externRulst[0], ruleVariable[externValueName])
   }
   //变量声明
-  r = /\${\?([a-zA-Z]*)}/;
+  r = /\${\?([a-zA-Z]*)\\*(\d*)}/;
   var declareName = "";
+  var groupNumber = 0;
   var declareRuslt = r.exec(reString);
   if(declareRuslt != null) {
     declareName = declareRuslt[1];
+    if(declareRuslt[2] != "") {   //这是一个捕获组引用
+      groupNumber = parseInt(declareRuslt[2]);
+    }
     reString = reString.replace(declareRuslt[0], "");   //删除这部分
   }
   console.debug("reString: ", reString);
   //使用正则进行匹配
-  var lastFileName = "";
+  var reMatchResult = "";
   function ruleVariableSet() {
     if(declareName != "") { //表示有变量声明
-      ruleVariable[declareName] = lastFileName;
+      ruleVariable[declareName] = reMatchResult[groupNumber];
     }
   }
+  let regex = RegExp(reString);
   if(rresult == null) { //无限制次数匹配
-    let regex = RegExp(reString);
     files.forEach(function(filename, index) {
-      if(regex.test(filename)) {
+      reMatchResult = regex.exec(filename)
+      if(reMatchResult) {
         files.splice(index, 1); //从中删除一个元素
-        lastFileName = filename;
         ruleVariableSet();
       }
     })
@@ -46,13 +50,12 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     let one = rresult[1];
     let comma = rresult[2];
     let two = rresult[3];
-    let regex = RegExp(reString);
     if(comma == "") { //假设one不为""   //固定次数模式
       let num = 0;
       files.forEach(function(filename, index) {
-        if(regex.test(filename)) {
+        reMatchResult = regex.exec(filename)
+        if(reMatchResult != null) {
           num += 1;
-          lastFileName = filename;
           files.splice(index, 1); //从中删除一个元素
         }
       })
@@ -100,7 +103,10 @@ function match(refileRules, files) { //refileRules是一个refile规则数组，
     return true;
   }
   for(let refileRule of refileRules) {
-    if(matchOne(refileRule, filesBuffer) == false) {
+    let result = matchOne(refileRule, filesBuffer);
+    console.debug("ruleVariable: ", ruleVariable)
+    console.debug("----------这条规则匹配结束-----------")
+    if(result == false) {
       return false;
     }
   }
