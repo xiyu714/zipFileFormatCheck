@@ -11,11 +11,15 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     reString = refileRule.replace(rresult[0], "");
   }
   //变量引用
-  r = /\${=([a-zA-Z]*)}/;
-  var externRulst= r.exec(reString);
-  if(externRulst != null) {
-    var externValueName = externRulst[1];
-    reString = reString.replace(externRulst[0], ruleVariable[externValueName])
+  r = /\${=([a-zA-Z]*)}/g;
+  while(true) {
+    var externRulst= r.exec(reString);
+    if(externRulst != null) {
+      var externValueName = externRulst[1];
+      reString = reString.replace(externRulst[0], ruleVariable[externValueName])
+    } else {
+      break;
+    }
   }
   //变量声明
   r = /\${\?([a-zA-Z]*)\\*(\d*)}/;
