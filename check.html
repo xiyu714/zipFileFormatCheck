@@ -13,16 +13,31 @@
     <script type="text/javascript" src="jszip.js"></script>
     <title>fileCheck</title>
     <style type="text/css">
-
+      #result {
+        margin: 0;
+      }
     </style>
   </head>
   <body>
-    <section class="mainSection">
-      <input type="file" id="file-input">
-      <div>
-        <p id="result"></p>
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1>欢迎来到文件格式验证页面</h1>
       </div>
-    </section>
+      <div class="row justify-content-start">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="file-input" aria-describedby="inputGroupFileAddon01">
+          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        </div>
+      </div>
+      <div class="row justify-content-start">
+        <div>
+          <p>匹配结果：</p>
+          <div class="alert alert-primary" role="alert">
+            <p id="result"></p>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
