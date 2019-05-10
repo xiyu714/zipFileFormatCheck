@@ -13,6 +13,10 @@
     <script type="text/javascript" src="jszip.js"></script>
     <title>fileCheck</title>
     <style type="text/css">
+      #phint {
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
       #result {
         margin: 0;
       }
@@ -26,14 +30,14 @@
       <div class="row justify-content-start">
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="file-input" aria-describedby="inputGroupFileAddon01">
-          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+          <label class="custom-file-label" for="inputGroupFile01">选择文件</label>
         </div>
       </div>
       <div class="row justify-content-start">
         <div>
-          <p>匹配结果：</p>
+          <p id="phint">匹配结果：</p>
           <div class="alert alert-primary" role="alert">
-            <p id="result"></p>
+            <p id="result">暂无匹配结果，请选择一个文件</p>
           </div>
         </div>
       </div>
