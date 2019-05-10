@@ -1,6 +1,8 @@
 var ruleVariable = {};  //用来保存匹配到的信息
 
 function matchOne(refileRule, files) { //refileRule为refile规则，files是一个filename数组
+  console.debug("refileRule: ", refileRule)
+  console.debug("files: ", files)
   //refilerule次数
   var r = /\${(\d*)(,*)\s*(\d*)}$/;
   var rresult = r.exec(refileRule);
@@ -23,6 +25,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     declareName = declareRuslt[1];
     reString = reString.replace(declareRuslt[0], "");   //删除这部分
   }
+  console.debug("reString: ", reString);
   //使用正则进行匹配
   var lastFileName = "";
   function ruleVariableSet() {
