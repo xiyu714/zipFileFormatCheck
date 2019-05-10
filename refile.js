@@ -43,13 +43,17 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
   }
   let regex = RegExp(reString);
   if(rresult == null) { //无限制次数匹配
+    let returnValue = true;
     files.forEach(function(filename, index) {
       reMatchResult = regex.exec(filename)
       if(reMatchResult) {
         files.splice(index, 1); //从中删除一个元素
         ruleVariableSet();
+      } else {
+        returnValue = false;
       }
     })
+    return returnValue;
   } else {  //限定的匹配次数
     let one = rresult[1];
     let comma = rresult[2];
