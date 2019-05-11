@@ -76,24 +76,9 @@
 
       function generateQueryString() {
         urlSearchParams = new URLSearchParams()
-        //解析inputText，保存queryString中
-        //现在不打算扩展，只要一个正则表达式就可以了
-        //reString = String.raw`^\d{12}([\u4e00-\u9fa5]|\u3007)+([\.\uff0e\u00b7\u30fb]?|\u3007?)+([\u4e00-\u9fa5|]|\u3007)+$`
-        snoString = String.raw`\d{12}(?:[\u4e00-\u9fa5]|\u3007)+(?:[\.\uff0e\u00b7\u30fb]?|\u3007?)+(?:[\u4e00-\u9fa5|]|\u3007)+`
-        //使用模板字符串编写规则，更为简便
-        reString = String.raw`{
-          "rules":[
-            "^(${snoString})\.zip/$\${?zipName\1}\${1}",
-            "\${=zipName}\.zip/\${=zipName}/$\${1}",
-            "^[^\/]*$\${0}"
-          ]
-}
-`    //之所以在这里还需要一次转义，是因为需要使用json解析
-        //由于String.raw的问题
-        reString = reString.replace(/\\\$/g, "$")
-        reString = reString.replace(/\\/g, String.raw`\\`) //这里是因为JSON对转义字符比较敏感，错误的转义字符会之间报错，而不是忽略
-        //测试语句是否正确
-        JSON.parse(reString);
+
+        var refileRuleObject = editor.get();
+        reString = JSON.stringify(refileRuleObject);
 
         urlSearchParams.append("check", reString)
         return urlSearchParams.toString()
