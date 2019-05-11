@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>验证生成</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style type="text/css">
+      #shortUrlHint {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <h2>验证脚本</h2>
@@ -11,6 +15,10 @@
     <input type="button" value="生成验证网页地址" id="generateUrl">
     <div class="checkScriptOutput">
       <p id="checkScriptUrl"></p>
+    </div>
+    <div id="shortUrlHint">
+      <p>点击下面链接将请求一个新浪短链接json数据，url_short字段中的内容为短链</p>
+      <a href="#" id="aShortUrl">短链</a>
     </div>
     <div id="howToUse">
       <h3>如何使用</h3>
@@ -52,8 +60,16 @@
       }
       var input = document.getElementById("generateUrl")
       var pOfOutput = document.getElementById("checkScriptUrl")
+
+      var shortUrlHint = document.getElementById("shortUrlHint")
+      var aShortUrl = document.getElementById("aShortUrl")
+      var xlBase = "http://api.t.sina.com.cn/short_url/shorten.xml?source=3271760578&url_long=";
       input.addEventListener("click", function() {
-        pOfOutput.textContent = getCheckUrl()
+        var checkurl = getCheckUrl();
+        pOfOutput.textContent = checkurl;
+        //显示短链提示，更新查询短链
+        shortUrlHint.style.display = "block";
+        aShortUrl.href = xlBase + checkurl;
       })
     </script>
   </body>
