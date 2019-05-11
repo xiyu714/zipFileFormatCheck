@@ -63,13 +63,16 @@
 
       var shortUrlHint = document.getElementById("shortUrlHint")
       var aShortUrl = document.getElementById("aShortUrl")
-      var xlBase = "http://api.t.sina.com.cn/short_url/shorten.xml?source=3271760578&url_long=";
+      var xlBase = "http://api.t.sina.com.cn/short_url/shorten.xml";
       input.addEventListener("click", function() {
         var checkurl = getCheckUrl();
         pOfOutput.textContent = checkurl;
         //显示短链提示，更新查询短链
         shortUrlHint.style.display = "block";
-        aShortUrl.href = xlBase + checkurl;
+        let params = new URLSearchParams("source=3271760578");
+        params.append("url_long", checkurl)
+        querystr = xlBase + "?" + params.toString();
+        aShortUrl.href = querystr;
       })
     </script>
   </body>
