@@ -64,8 +64,8 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     let comma = rresult[2];
     let two = rresult[3];
     let lastMatchResult = "";
-    if(comma == "") { //假设one不为""   //固定次数模式
-      let num = 0;
+    let num = 0;
+    function filesMatch() {
       files.forEach(function(filename, index) {
         reMatchResult = regex.exec(filename)
         if(reMatchResult != null) {
@@ -75,6 +75,9 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
           lastMatchResult = reMatchResult;
         }
       })
+    }
+    if(comma == "") { //假设one不为""   //固定次数模式
+      filesMatch();
       if(num == parseInt(one)) {
         //匹配成功，将最后一次匹配的结果，放入ruleVariable中
         reMatchResult = lastMatchResult;
@@ -84,13 +87,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         return false;
       }
     } else if (two == "") { //one次及以上
-      let num = 0;
-      files.forEach(function(filename, index) {
-        if(regex.test(filename)) {
-          num += 1;
-          files.splice(index, 1); //从中删除一个元素
-        }
-      })
+      filesMatch();
       if(num >= parseInt(one)) {
         ruleVariableSet();
         return true;
@@ -98,13 +95,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         return false;
       }
     } else {  //one到two次
-      let num = 0;
-      files.forEach(function(filename, index) {
-        if(regex.test(filename)) {
-          num += 1;
-          files.splice(index, 1); //从中删除一个元素
-        }
-      })
+      filesMatch()
       if(num >= parseInt(one) && num <= parseInt(two)) {
         ruleVariableSet();
         return true;
