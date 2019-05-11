@@ -43,7 +43,7 @@
         //使用模板字符串编写规则，更为简便
         reString = String.raw`{
           "rules":[
-            "^(${snoString})\.zip/$\${?zipName\1}",
+            "^(${snoString})\.zip/$\${?zipName\1}\${1}",
             "\${=zipName}\.zip/\${=zipName}/$\${1}",
             "^[^\/]*$\${0}"
           ]
