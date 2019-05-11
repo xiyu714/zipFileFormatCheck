@@ -16,12 +16,15 @@
         word-break: break-all;
         margin-top: 15px;
       }
+      #checkScriptInput {
+        margin-bottom: 5px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h2>验证脚本</h2>
-      <textarea id="checkScriptInput" rows="8" cols="80"></textarea>
+      <textarea id="checkScriptInput" class="form-control"></textarea>
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
         <p id="checkScriptUrl"></p>
