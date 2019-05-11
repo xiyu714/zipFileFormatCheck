@@ -42,6 +42,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
   var reMatchResult = "";
   function ruleVariableSet() {
     if(declareName != "") { //表示有变量声明
+      console.debug(reMatchResult)
       ruleVariable[declareName] = reMatchResult[groupNumber];
     }
   }
@@ -62,6 +63,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     let one = rresult[1];
     let comma = rresult[2];
     let two = rresult[3];
+    let lastMatchResult = "";
     if(comma == "") { //假设one不为""   //固定次数模式
       let num = 0;
       files.forEach(function(filename, index) {
@@ -69,10 +71,13 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
         if(reMatchResult != null) {
           num += 1;
           files.splice(index, 1); //从中删除一个元素
+
+          lastMatchResult = reMatchResult;
         }
       })
       if(num == parseInt(one)) {
         //匹配成功，将最后一次匹配的结果，放入ruleVariable中
+        reMatchResult = lastMatchResult;
         ruleVariableSet();
         return true;
       } else {
