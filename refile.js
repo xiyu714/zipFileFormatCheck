@@ -1,8 +1,11 @@
 var ruleVariable = {};  //用来保存匹配到的信息
+var debugInfo = {};   //保存一次的匹配信息
 
 function matchOne(refileRule, files) { //refileRule为refile规则，files是一个filename数组
   console.debug("refileRule: ", refileRule)
   console.debug("files: ", files)
+  debugInfo.refileRule = refileRule;
+  debugInfo.files = files.slice();
   //refilerule次数
   var r = /\${(\d*)(,*)\s*(\d*)}$/;
   var rresult = r.exec(refileRule);
@@ -34,6 +37,7 @@ function matchOne(refileRule, files) { //refileRule为refile规则，files是一
     reString = reString.replace(declareRuslt[0], "");   //删除这部分
   }
   console.debug("reString: ", reString);
+  debugInfo.reString = reString;
   //使用正则进行匹配
   var reMatchResult = "";
   function ruleVariableSet() {
@@ -114,6 +118,7 @@ function match(refileRules, files) { //refileRules是一个refile规则数组，
     let result = matchOne(refileRule, filesBuffer);
     console.debug("ruleVariable: ", ruleVariable)
     console.debug("----------这条规则匹配结束-----------")
+    console.debug("匹配结果为: ", result);
     if(result == false) {
       return false;
     }
