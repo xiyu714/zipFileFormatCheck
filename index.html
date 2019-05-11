@@ -2,7 +2,7 @@
 <html lang="zh" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>验证生成</title>
+    <title>验证页面生成</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="jsoneditor.min.css" rel="stylesheet" type="text/css">
     <script src="jsoneditor.min.js"></script>
@@ -21,11 +21,14 @@
       #jsoneditor {
         margin-bottom: 5px;
       }
+      .main {
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h2>验证脚本</h2>
+    <div class="container main">
+      <h3>验证脚本</h2>
       <div id="jsoneditor"></div>
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
