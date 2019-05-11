@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>验证生成</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="jsoneditor.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style type="text/css">
       #shortUrlHint {
@@ -16,7 +18,7 @@
         word-break: break-all;
         margin-top: 15px;
       }
-      #checkScriptInput {
+      #jsoneditor {
         margin-bottom: 5px;
       }
     </style>
@@ -24,10 +26,10 @@
   <body>
     <div class="container">
       <h2>验证脚本</h2>
-      <textarea id="checkScriptInput" class="form-control"></textarea>
+      <div id="jsoneditor"></div>
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
-        <p id="checkScriptUrl"></p>
+        <p id="checkScriptUrl">链接尚未生成</p>
       </div>
       <div id="shortUrlHint" class="alert alert-success">
         <p>点击下面链接按钮，将请求一个新浪短链接的json数据，url_short标签中的内容为短链</p>
@@ -42,6 +44,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript">
+    var container = document.getElementById('jsoneditor');
+
+    var options = {
+      mode: 'tree',
+      modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
+      onError: function (err) {
+        alert(err.toString());
+      },
+      onModeChange: function (newMode, oldMode) {
+        console.log('Mode switched from', oldMode, 'to', newMode);
+      }
+    };
+
+    var json = {
+          "rules":[
+            "^(\\d{12}(?:[\\u4e00-\\u9fa5]|\\u3007)+(?:[\\.\\uff0e\\u00b7\\u30fb]?|\\u3007?)+(?:[\\u4e00-\\u9fa5|]|\\u3007)+)\\.zip/$${?zipName\\1}${1}",
+            "${=zipName}\\.zip/${=zipName}/$${1}",
+            "^[^\\/]*$${0}"
+          ]
+    };
+
+    var editor = new JSONEditor(container, options, json);
+
       function getCheckUrl(queryString) {
         var url = window.location.toString()
         var array = url.split("/")
@@ -50,8 +75,6 @@
       }
 
       function generateQueryString() {
-        var inputTextarea = document.getElementById("checkScriptInput")
-        inputText = inputTextarea.value //直接使用这个也没有问题
         urlSearchParams = new URLSearchParams()
         //解析inputText，保存queryString中
         //现在不打算扩展，只要一个正则表达式就可以了
