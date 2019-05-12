@@ -62,6 +62,14 @@
       //复制
       var clipboard = new ClipboardJS("#urlCopy")
       clipboard.on("success", function(e) {
+        var trigger = e.trigger;
+        var oldTitle = trigger.dataset["originalTitle"];
+        trigger.dataset["originalTitle"] = "复制成功";
+        $("#urlCopy").tooltip("show")
+        trigger.addEventListener("mouseout", function() {
+          trigger.dataset["originalTitle"] = oldTitle;
+          $("#urlCopy").tooltip("hide")
+        })
         e.clearSelection();
       })
       //初始化提示框
