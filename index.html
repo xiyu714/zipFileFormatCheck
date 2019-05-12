@@ -45,7 +45,9 @@
       <div id="jsoneditor"></div>
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
-        <p id="checkScriptUrl">链接尚未生成</p>
+        <a href="#" title="点击跳转">
+          <p id="checkScriptUrl">链接尚未生成</p>
+        </a>
         <button type="button" id="urlCopy" class="btn btn-primary" data-toggle="tooltip" title="复制链接" data-placement="top" data-clipboard-target="#checkScriptUrl">copy</button>
       </div>
       <div id="shortUrlHint" class="alert alert-success">
@@ -139,6 +141,7 @@
       input.addEventListener("click", function() {
         var checkurl = getCheckUrl();
         pOfOutput.textContent = checkurl;
+        pOfOutput.parentElement.href = checkurl;
         //显示按钮
         urlCopy.style.display = "block";
         //显示短链提示，更新查询短链
