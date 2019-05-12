@@ -50,9 +50,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript">
       var md = window.markdownit();
-      var howTouse = document.getElementById("howToUse");
+      var howToUse = document.getElementById("howToUse");
       //md 文本
-
+      $.ajax("如何使用验证脚本.md", {
+        success: function (data) {
+          var result = md.render(data);
+          howToUse.innerHTML = result;
+        }
+      })
 
     </script>
     <script type="text/javascript">
