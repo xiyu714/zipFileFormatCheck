@@ -46,7 +46,7 @@
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
         <p id="checkScriptUrl">链接尚未生成</p>
-        <button type="button" id="urlCopy" class="btn btn-primary" data-clipboard-target="#checkScriptUrl">copy</button>
+        <button type="button" id="urlCopy" class="btn btn-primary" data-toggle="tooltip" title="复制链接" data-placement="top" data-clipboard-target="#checkScriptUrl">copy</button>
       </div>
       <div id="shortUrlHint" class="alert alert-success">
         <p>点击下面链接按钮，将请求一个新浪短链接的json数据，url_short标签中的内容为短链</p>
@@ -63,6 +63,10 @@
       var clipboard = new ClipboardJS("#urlCopy")
       clipboard.on("success", function(e) {
         e.clearSelection();
+      })
+      //初始化提示框
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
       })
     </script>
     <script type="text/javascript">
