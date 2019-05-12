@@ -61,6 +61,9 @@
     <script type="text/javascript">
       //复制
       var clipboard = new ClipboardJS("#urlCopy")
+      clipboard.on("success", function(e) {
+        e.clearSelection();
+      })
     </script>
     <script type="text/javascript">
       var md = window.markdownit();
