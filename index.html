@@ -11,6 +11,7 @@
 			  src="https://code.jquery.com/jquery-3.4.1.min.js"
 			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css">
     <style type="text/css">
@@ -30,6 +31,13 @@
       .main {
         margin-top: 20px;
       }
+
+      #urlCopy {
+        position:absolute;
+        bottom: 5px;
+        right: 5px;
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -39,6 +47,7 @@
       <input type="button" value="生成验证网页地址" id="generateUrl">
       <div id="checkScriptOutput" class="alert alert-primary">
         <p id="checkScriptUrl">链接尚未生成</p>
+        <button type="button" id="urlCopy" class="btn btn-primary">copy</button>
       </div>
       <div id="shortUrlHint" class="alert alert-success">
         <p>点击下面链接按钮，将请求一个新浪短链接的json数据，url_short标签中的内容为短链</p>
@@ -103,6 +112,7 @@
       }
       var input = document.getElementById("generateUrl")
       var pOfOutput = document.getElementById("checkScriptUrl")
+      var urlCopy = document.getElementById("urlCopy")
 
       var shortUrlHint = document.getElementById("shortUrlHint")
       var aShortUrl = document.getElementById("aShortUrl")
@@ -110,6 +120,8 @@
       input.addEventListener("click", function() {
         var checkurl = getCheckUrl();
         pOfOutput.textContent = checkurl;
+        //显示按钮
+        urlCopy.style.display = "block";
         //显示短链提示，更新查询短链
         shortUrlHint.style.display = "block";
         let params = new URLSearchParams("source=3271760578");
